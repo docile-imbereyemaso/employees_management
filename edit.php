@@ -2,14 +2,20 @@
 
 require_once("./config/db.php");
 
+$id = $_GET["id"];
+
+$result=mysqli_query($conn,"SELECT * FROM employees WHERE id=$id");
+
+$record = mysqli_fetch_assoc($result);
+
 if($_SERVER["REQUEST_METHOD"]==="POST"){
     $name=$_POST["name"];
     $department=$_POST["department"];
     $salary=$_POST["salary"];
     $hire_date = $_POST["hire_date"];
 
-    $query = "INSERT INTO employees (name,department,salary,hire_date) VALUES
-    ('$name','$department','$salary','$hire_date')";
+    $query="UPDATE employees SET name='$name',department='$department',salary='$salary',hire_date='$hire_date
+    ' WHERE id = $id";
 
     if(mysqli_query($conn,$query)){
         header("Location:index.php");
@@ -35,14 +41,14 @@ if($_SERVER["REQUEST_METHOD"]==="POST"){
 
         <form action="" method="post">
             <label for="name">Name:</label>
-            <input type="text" placeholder="Enter your name" name="name" required>
+            <input type="text" placeholder="Enter your name" name="name" value="<?php echo $record["name"];?>" required>
             <label for="department">Department:</label>
-            <input type="text" placeholder="Enter your department" name="department" required>
+            <input type="text" placeholder="Enter your department" name="department" value="<?php echo $record["department"];?>" required>
               <label for="salary">Salary:</label>
-              <input type="number" step="1" placeholder="Enter your salary" name="salary">
+              <input type="number" step="0" placeholder="Enter your salary" name="salary" value="<?php echo $record["salary"];?>">
 
               <label for="date">Hire date:</label>
-              <input type="date" placeholder="Enter your hire_date" name="hire_date">
+              <input type="date" placeholder="Enter your hire_date" name="hire_date" value="<?php echo $record["hire_date"];?>">
 
               <button type="submit">Add new Employee</button>
         </form>
